@@ -36,12 +36,32 @@
 
 (() => {
     const mascot = document.getElementById('social-mascot');
+    const mascotWrap = mascot?.closest('.mascot-wrap');
     const socialLinks = document.querySelectorAll('.socials a');
-    if (!mascot || !socialLinks.length) return;
+    if (!mascot || !mascotWrap || !socialLinks.length) return;
 
-    const moods = ['ebloid', 'pinterest', 'twitch', 'youtube', 'steam', 'telegram', 'x', 'github', '7tv'];
+    const emotions = {
+        ebloid: 'заинтересован',
+        pinterest: 'делится находкой',
+        twitch: 'смеётся в гарнитуре',
+        youtube: 'удивлён',
+        steam: 'играет на геймпаде',
+        telegram: 'машет рукой',
+        x: 'подмигивает',
+        github: 'показывает лайк',
+        '7tv': 'радуется победе'
+    };
+
     const setMood = (link, active) => {
-        mascot.dataset.mood = active ? (moods.find((mood) => link.classList.contains(mood)) || 'idle') : 'idle';
+        const mood = active
+            ? (Object.keys(emotions).find((name) => link.classList.contains(name)) || 'idle')
+            : 'idle';
+        mascot.dataset.mood = mood;
+        mascotWrap.dataset.mood = mood;
+        mascot.setAttribute(
+            'aria-label',
+            mood === 'idle' ? '3D-аватар TRUTH' : `3D-аватар TRUTH: ${emotions[mood]}`
+        );
     };
 
     socialLinks.forEach((link) => {
